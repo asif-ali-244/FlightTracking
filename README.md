@@ -1,14 +1,14 @@
 # Flight Tracker CLI
-This is a command-line utility to list arrivals and departures information for any airport in the world using the airport's name or it's IATA or ICAO code. It can also be used to get flight's information using flight number.
+This is a command-line utility to list arrival and departure information for any airport in the world using the airport's name or it's IATA or ICAO code. It can also be used to get flight's information using flight number.
 
 ## Dependencies
 This package uses the API [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). I have used `Click` library for creating our command line interface. To do text correction I have used `difflib` library.  In addition to this, it also uses a json file to retrieve historical data on airports.
 
 ## Installation
-To use this package we have to have an API key for the AeroDataBox API, you can get your free API key from [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). After getting the API key set your system's environment variable `AERO_KEY=<API-KEY>`.
+To use this package we have to have an API key for the AeroDataBox API, you can get your free API key from [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). After getting the API key set your system's environment variable to `AERO_KEY=<API-KEY>`.
 * Clone the repo to your local directory `git clone https://github.com/asif-ali-244/FlightTracking.git`
 * In your local directory create a virtual environment `python -m virtualenv venv`.
-* Activate your virtual environment `source venv/Scripts/activate`.
+* Activate your virtual environment `. venv/Scripts/activate` or `source venv/bin/activate`.
 * Install the package `pip install --editable .`
 * Check using `FlightTracker --help`.
 
