@@ -1,15 +1,15 @@
 # Flight Tracker CLI
-This is a command-line utility to list arrival and departure information for any airport in the world using the airport's name or it's IATA or ICAO code.
+This is a command-line utility to list arrivals and departures information for any airport in the world using the airport's name or it's IATA or ICAO code. It can also be used to get flight's information using flight number.
 
 ## Dependencies
-This package uses the API [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). In addition to this, it also uses a json file to retrieve historical data on airports.
+This package uses the API [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). I have used `Click` library for creating our command line interface. To do text correction I have used `difflib` library.  In addition to this, it also uses a json file to retrieve historical data on airports.
 
 ## Installation
-To use this package we should have an API key for the AeroDataBox API, you can get your free API key by from [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). After getting the API key set your system's environment variable `AERO_KEY=<API-KEY>`.
+To use this package we have to have an API key for the AeroDataBox API, you can get your free API key from [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). After getting the API key set your system's environment variable `AERO_KEY=<API-KEY>`.
 * Clone the repo to your local directory `git clone https://github.com/asif-ali-244/FlightTracking.git`
 * In your local directory create a virtual environment `python -m virtualenv venv`.
 * Activate your virtual environment `source venv/Scripts/activate`.
-* Install the package `pip install --editable ,`
+* Install the package `pip install --editable .`
 * Check using `FlightTracker --help`.
 
 ## Usage
@@ -39,8 +39,8 @@ Commands:
 * `--date` or `-b` is the beginning time of our time interval. It accepts a string in the format `%d/%m/%Y` or `%d/%m/%Y %H:%M`. If this is not specified then it takes the current time as default value.
 * `-t` or `--delta` is the time window in hours that will be added to our beginning time. It's default and maximum value is 12 hours.
 * `--airline` tag will filter the result using airline name. 
-* `flight` is a command which is used to retrieve flight information using flight number.
-* `search` is a command which is used to search an airport's information by it's name, ICAO, IATA, or city. 
+* `flight` is a sub-command which is used to retrieve flight information using flight number.
+* `search` is a sub-command which is used to search an airport's information by it's name, ICAO, IATA, or city. 
 
 ## Examples:
 
@@ -52,7 +52,6 @@ Commands:
 2. To list all the flights from Chennai International Airport(MAA) to Indira Gandhi International Airport(DEL)
 ```
     $ FlightTracker -src 'MAA' -dest 'DEL'
-
 ```
 ![02](Screenshots/02.png)
 3. To list all depatures from Indira Gandhi International Airport(DEL) on 12/03/2021 
@@ -75,3 +74,9 @@ Commands:
     $ FlightTracker search 'New York'
 ```
 ![06](Screenshots/06.png)
+
+7. The application can do text correction in case you have misspelled airport name or the name is not complete. For example, to list all the flights from `chennai inter` on date `15/03/2021 22:10` having a time window of `4` hours. Since there exist no airport named `chennai inter` it will search the database and list all the airport matches and will prompt the user to use the matches.
+```
+    $ FlightTracker -src 'chennai inter' --date '15/03/2021 22:10' --delta 4
+```
+![07](Screenshots/07.png)

@@ -3,11 +3,15 @@ import os
 import datetime
 import json
 import click
+import sys
 from difflib import get_close_matches
 from prettytable import PrettyTable
 baseUrl="https://aerodatabox.p.rapidapi.com"
 rapidHost="aerodatabox.p.rapidapi.com"
-KEY=os.environ.get("AERO_KEY")
+if "AERO_KEY" in os.environ:
+    KEY=os.environ.get("AERO_KEY")
+else:
+    sys.exit("Environment variable is not set. Aborting!!")
    
 
 def get_airport(identity):
@@ -17,7 +21,7 @@ def get_airport(identity):
     # If identity is a IATA Code    
     if len(identity)==3:
         identity=identity.upper()
-        for value,key in airports.items():
+        for key in airports.values():
             if key["iata"]==identity:
                 return [[key["icao"],key["iata"],key["name"],key["city"],key["state"],key["country"]]]
 
@@ -30,7 +34,7 @@ def get_airport(identity):
     else:
         identity=identity.title()
         all_names=[]    # Store all airport names to use in difflib in case if it's misspelled
-        for value,key in airports.items():
+        for key in airports.values():
             all_names.append(key["name"])
             if key["name"]==identity:
                 return [[key["icao"],key["iata"],key["name"],key["city"],key["state"],key["country"]]]
@@ -58,6 +62,7 @@ def get_response(icao,begin,end):
         return response.json()
     else:
         print(f"Connection Error! {response.status_code}")
+        sys.exit("Aborting!!!")
 def get_flights(flag,identity,begin,end):
     response=get_response(identity,begin,end)
     key="arrivals" if flag==True else "departures"
