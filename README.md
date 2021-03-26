@@ -6,6 +6,11 @@ This package uses the API [AeroDataBox API](https://rapidapi.com/aerodatabox/api
 
 ## Installation
 To use this package we should have an API key for the AeroDataBox API, you can get your free API key by from [AeroDataBox API](https://rapidapi.com/aerodatabox/api/aerodatabox/endpoints). After getting the API key set your system's environment variable `AERO_KEY=<API-KEY>`.
+* Clone the repo to your local directory `git clone https://github.com/asif-ali-244/FlightTracking.git`
+* In your local directory create a virtual environment `python -m virtualenv venv`.
+* Activate your virtual environment `source venv/Scripts/activate`.
+* Install the package `pip install --editable ,`
+* Check using `FlightTracker --help`.
 
 ## Usage
 ```
