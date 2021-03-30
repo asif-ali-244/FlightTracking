@@ -91,13 +91,18 @@ def print_table(data,header):
 
 #Helper function to change the time format
 def getTime(begin,end):
-    if begin==None:
-        begin=datetime.datetime.utcnow()
-    else:
-        if len(begin.split())==2:
-            begin=datetime.datetime.strptime(begin,"%d/%m/%Y %H:%M")
+    try:
+
+        if begin==None:
+            begin=datetime.datetime.utcnow()
         else:
-            begin=datetime.datetime.strptime(begin,"%d/%m/%Y")
+            if len(begin.split())==2:
+                begin=datetime.datetime.strptime(begin,"%d/%m/%Y %H:%M")
+            else:
+                begin=datetime.datetime.strptime(begin,"%d/%m/%Y")
+    except ValueError as e:
+        print(e)
+        sys.exit("Aborting!!!")
     end=datetime.timedelta(hours=end)+begin
     begin=begin.strftime("%Y-%m-%dT%H:%M")
     end=end.strftime("%Y-%m-%dT%H:%M")
@@ -124,10 +129,15 @@ def get_airlines(flights, airline):
 
 # Get the flight status using flight number and date
 def get_flight_status(flight,begin):
-    if begin==None:
-        begin=datetime.datetime.utcnow()
-    else:
-        begin=datetime.datetime.strptime(begin,"%d/%m/%Y")
+    try:
+
+        if begin==None:
+            begin=datetime.datetime.utcnow()
+        else:
+            begin=datetime.datetime.strptime(begin,"%d/%m/%Y")
+    except ValueError as e:
+        print(e)
+        sys.exit("Aborting!!!")
     begin=begin.strftime("%Y-%m-%d")
     headers = {
     'x-rapidapi-key': KEY,
@@ -136,18 +146,22 @@ def get_flight_status(flight,begin):
     url=f"https://aerodatabox.p.rapidapi.com/flights/number/{flight}/{begin}"
     response=requests.get(url,headers=headers).json()
     data=[]
-    for flight in response:
-        airline=flight["airline"].get("name")
-        arrival_airport=flight["arrival"].get("airport").get("name")
-        arrival_time=flight["arrival"].get("scheduledTimeUtc")
-        arrival_time_local=flight["arrival"].get("scheduledTimeLocal")
-        depart_airport=flight["departure"].get("airport").get("name")
-        depart_time=flight["departure"].get("scheduledTimeUtc")
-        depart_time_local=flight["departure"].get("scheduledTimeLocal")
-        status=flight["status"]
-        number=flight["number"]
-        data.append([number,status,airline,arrival_airport,arrival_time,arrival_time_local,depart_airport,depart_time,depart_time_local])
-    return data
+    if response:
+
+        for flight in response:
+            airline=flight["airline"].get("name")
+            arrival_airport=flight["arrival"].get("airport").get("name")
+            arrival_time=flight["arrival"].get("scheduledTimeUtc")
+            arrival_time_local=flight["arrival"].get("scheduledTimeLocal")
+            depart_airport=flight["departure"].get("airport").get("name")
+            depart_time=flight["departure"].get("scheduledTimeUtc")
+            depart_time_local=flight["departure"].get("scheduledTimeLocal")
+            status=flight["status"]
+            number=flight["number"]
+            data.append([number,status,airline,arrival_airport,arrival_time,arrival_time_local,depart_airport,depart_time,depart_time_local])
+        return data
+    else:
+        print(f"Connection Error! {response.status_code}")
 
 # Search airport information using input string
 def find_airport(string):
@@ -170,7 +184,8 @@ def find_airport(string):
             city=airport.get("municipalityName","-")
             country=airport.get("countryCode","-")
             data.append([icao,iata,name,city,country])
-
+    else:
+        print(f"Connection Error! {response.status_code}")
     return data
 
 
